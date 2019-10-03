@@ -20,7 +20,7 @@ jobs:
             - name: Test
               run: xvfb-run npm t
             - name: Build
-              run: vsce package
+              run: npm run package
 
             # - name: Publish
             #   run: vsce
