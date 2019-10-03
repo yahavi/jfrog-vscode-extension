@@ -2,15 +2,12 @@ const github = require('@actions/github');
 const core = require('@actions/core');
 const fs = require('fs');
 
-const githubToken = core.getInput('GITHUB_TOKEN', { required: true });
-const octokit = new github.GitHub(githubToken);
-
 let tag = process.env.GITHUB_REF.split('/')[2];
-core.debug('Releasing ' + tag);
-
 let vsixFileName = 'jfrog-vscode-extension-' + tag + '.vsix';
-let vsixFilePath = '../' + vsixFileName;
+core.debug('Uploading ' + vsixFileName);
 
+let vsixFilePath = '../' + vsixFileName;
+const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
 octokit.repos
     .uploadReleaseAsset({
         file: fs.createReadStream(vsixFilePath),
