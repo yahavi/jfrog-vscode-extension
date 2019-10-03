@@ -1,11 +1,14 @@
 const github = require('@actions/github');
-const core = require('@actions/core')
+const core = require('@actions/core');
 const fs = require('fs');
 
 const githubToken = core.getInput('GITHUB_TOKEN');
 const octokit = new github.GitHub(githubToken);
 
-let vsixFileName = 'jfrog-vscode-extension-' + process.argv[1] + '.vsix';
+core.debug('Releasing ' + env.process.GITHUB_REF);
+let tag = env.process.GITHUB_REF.split('/')[2];
+
+let vsixFileName = 'jfrog-vscode-extension-' + tag + '.vsix';
 let vsixFilePath = '../' + vsixFileName;
 
 octokit.repos.uploadReleaseAsset({
@@ -15,5 +18,5 @@ octokit.repos.uploadReleaseAsset({
         'content-type': 'application/zip'
     },
     name: vsixFileName,
-    url: 'https://uploads.github.com/repos/yahavi/jfrog-vscode-extension/releases/' + process.argv[j] + '/assets{?name,label}'
+    url: 'https://uploads.github.com/repos/yahavi/jfrog-vscode-extension/releases/' + tag + '/assets{?name,label}'
 });
