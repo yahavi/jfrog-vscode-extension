@@ -1,4 +1,3 @@
-
 name: Release
 
 on:
@@ -17,8 +16,8 @@ jobs:
               run: npm i
             - name: Lint
               run: npm run lint
-            - name: Test
-              run: xvfb-run npm t
+            # - name: Test
+            #   run: xvfb-run npm t
             - name: Build
               run: npm run package
 
@@ -29,8 +28,7 @@ jobs:
             #   env:
             #       PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
-            
             - name: Upload asset
               run: cd releaseScripts && npm i && node uploadAsset.js ${{ github.ref }}
-              env: 
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
