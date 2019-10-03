@@ -4,10 +4,13 @@ const fs = require('fs');
 
 let tag = process.env.GITHUB_REF.split('/')[2];
 let vsixFileName = 'jfrog-vscode-extension-' + tag + '.vsix';
-core.debug('Uploading ' + vsixFileName);
+core.info('Uploading ' + vsixFileName);
 
 let vsixFilePath = '../' + vsixFileName;
 const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
+
+core.info('vsixFilePath exist: ' + fs.existsSync(vsixFilePath))
+core.info('vsixFileName exist: ' + fs.existsSync(vsixFileName))
 
 octokit.repos
     .getRelease({
@@ -16,6 +19,7 @@ octokit.repos
         release_id: tag
     })
     .then(url => {
+        core.info('Uploading url: ' + url)
         octokit.repos.uploadReleaseAsset({
             file: fs.createReadStream(vsixFilePath),
             headers: {
