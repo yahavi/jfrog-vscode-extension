@@ -1,0 +1,36 @@
+
+name: Release
+
+on:
+    release:
+        types: published
+jobs:
+    release:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - name: Setup NodeJS
+              uses: actions/setup-node@v1
+              with:
+                  node-version: '10.x'
+            - name: Install
+              run: npm i
+            - name: Lint
+              run: npm run lint
+            - name: Test
+              run: xvfb-run npm t
+            - name: Build
+              run: vsce package
+
+            # - name: Publish
+            #   run: vsce
+            #   with:
+            #       args: publish --access public
+            #   env:
+            #       PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
+            
+            - name: Upload asset
+              run: cd releaseScripts && npm i && node uploadAsset.js ${{ github.ref }}
+              env: 
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
