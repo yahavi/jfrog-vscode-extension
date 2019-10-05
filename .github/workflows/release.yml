@@ -16,13 +16,15 @@ jobs:
               run: npm i
             - name: Lint
               run: npm run lint
+            - name: Install vsce
+              run: npm i -g vsce
             # - name: Test
             #   run: xvfb-run npm t
             - name: Build
-              run: npm run package
+              run: vsce package
 
-            - name: Tag
-              run: echo ${{ github.ref }} | cut -c 11- | npm run upload
+            - name: Publish to marketplace
+              run: echo ${{ github.ref }} | cut -c 11- | xargs vsce publish
             # - name: Publish
             #   run: vsce
             #   with:

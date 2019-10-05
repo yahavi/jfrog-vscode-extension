@@ -125,8 +125,7 @@
         "lint": "tslint -p tsconfig.json",
         "pretest": "npm run compile",
         "test": "node ./out/test/runTest.js",
-        "package": "vsce package",
-        "upload": "vsce publish"
+        "package": "vsce package"
     },
     "dependencies": {
         "xray-client-js": "^1.0.0",
