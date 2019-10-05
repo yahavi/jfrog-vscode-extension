@@ -9,17 +9,26 @@ core.info('Uploading ' + vsixFileName);
 let vsixFilePath = '../' + vsixFileName;
 const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
 
-core.info('vsixFilePath exist: ' + fs.existsSync(vsixFilePath))
-core.info('vsixFileName exist: ' + fs.existsSync(vsixFileName))
+core.info('vsixFilePath exist: ' + fs.existsSync(vsixFilePath));
+core.info('vsixFileName exist: ' + fs.existsSync(vsixFileName));
 
 octokit.repos
-    .getRelease({
+    .listReleases({
         owner: 'yahavi',
-        repo: 'jfrog-vscode-extension',
-        release_id: tag
+        repo: 'jfrog-vscode-extension'
+    })
+    .then(releases => {
+        core.info('releases: ' + releases);
+        let release_id = releases.data.find(release => release.tag_name === tag);
+        core.info('release_id: ' + release_id);
+        octokit.repos.getRelease({
+            owner: 'yahavi',
+            repo: 'jfrog-vscode-extension',
+            release_id: release_id
+        });
     })
     .then(url => {
-        core.info('Uploading url: ' + url)
+        core.info('Uploading url: ' + url);
         octokit.repos.uploadReleaseAsset({
             file: fs.createReadStream(vsixFilePath),
             headers: {
