@@ -16,9 +16,9 @@ octokit.repos
         core.info('Uploading ' + vsixFileName);
         return octokit.repos.uploadReleaseAsset({
             file: fs.createReadStream(vsixFilePath),
-            mediaType: 'application/zip',
             headers: {
                 'content-length': fs.statSync(vsixFilePath).size,
+                'content-type': 'application/zip'
             },
             name: vsixFileName,
             url: release.uploadUrl
