@@ -8,7 +8,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Tag
-              run: echo ${{ github.ref }} | cut -c 11- | vsce publish
+              run: echo ${{ github.ref }} | cut -c 11- | npm run upload
             - uses: actions/checkout@v1
             - name: Setup NodeJS
               uses: actions/setup-node@v1
