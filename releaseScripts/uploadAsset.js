@@ -11,6 +11,9 @@ octokit.repos
     })
     .then(releases => {
         const release = releases.data.find(release => release.tag_name === tag);
+        return Promise.resolve(release.upload_url);
+    })
+    .then(uploadUrl => {
         const vsixFileName = 'jfrog-vscode-extension-' + tag + '.vsix';
         const vsixFilePath = '../' + vsixFileName;
         core.info('Uploading ' + vsixFileName);
@@ -21,7 +24,7 @@ octokit.repos
                 'content-type': 'application/zip'
             },
             name: vsixFileName,
-            url: release.uploadUrl
+            url: uploadUrl
         });
     })
     .catch(error => {
