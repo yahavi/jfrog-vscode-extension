@@ -14,7 +14,7 @@ octokit.repos
         const vsixFileName = 'jfrog-vscode-extension-' + tag + '.vsix';
         const vsixFilePath = '../' + vsixFileName;
         core.info('Uploading ' + vsixFileName);
-        return octokit.repos.uploadReleaseAsset({
+        octokit.repos.uploadReleaseAsset({
             file: fs.createReadStream(vsixFilePath),
             headers: {
                 'content-length': fs.statSync(vsixFilePath).size,
