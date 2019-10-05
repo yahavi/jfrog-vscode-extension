@@ -26,6 +26,7 @@ octokit.repos
             repo: 'jfrog-vscode-extension',
             release_id: release.id
         });
+        return Promise.resolve(release.upload_url);
     })
     .then(url => {
         core.info('Uploading url: ' + url);
