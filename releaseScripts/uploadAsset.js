@@ -24,9 +24,6 @@ octokit.repos
             url: release.uploadUrl
         });
     })
-    .then(() => {
-        core.info('Asset uploaded successfully');
-    })
     .catch(error => {
         core.error(error);
     });
