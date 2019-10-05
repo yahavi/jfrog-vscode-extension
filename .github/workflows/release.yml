@@ -8,7 +8,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Tag
-              run: echo ${{ split(github.ref, '/') }}
+              run: echo env
             - uses: actions/checkout@v1
             - name: Setup NodeJS
               uses: actions/setup-node@v1
