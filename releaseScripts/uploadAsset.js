@@ -19,12 +19,12 @@ octokit.repos
     })
     .then(releases => {
         core.info('releases: ' + releases);
-        let release_id = releases.data.find(release => release.tag_name === tag);
-        core.info('release_id: ' + release_id);
+        let release = releases.data.find(release => release.tag_name === tag);
+        core.info('release_id: ' + JSON.stringify(release));
         octokit.repos.getRelease({
             owner: 'yahavi',
             repo: 'jfrog-vscode-extension',
-            release_id: release_id
+            release_id: release.id
         });
     })
     .then(url => {
