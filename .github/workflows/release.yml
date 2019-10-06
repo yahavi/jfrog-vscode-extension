@@ -28,8 +28,6 @@ jobs:
             #   run: xvfb-run npm t
             - name: Build
               run: vsce package
-            - name: Push
-
             - name: Publish to marketplace
               run: echo ${{ github.ref }} | cut -c 11- | xargs vsce publish
             # - name: Publish
