@@ -9,7 +9,7 @@ jobs:
         steps:
             - uses: actions/checkout@v1
             - name: Config Github
-              run: git config --global ${{ github.actor }}
+              run: git config --global user.name ${{ github.actor }}
             - name: Setup NodeJS
               uses: actions/setup-node@v1
               with:
