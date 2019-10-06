@@ -18,6 +18,8 @@ jobs:
               run: npm i -g vsce
             - name: Install
               run: npm i
+            - name: Test commit
+              run: git commit -am "commit changes"
             - uses: ad-m/github-push-action@master
               with:
                   github_token: ${{ secrets.GITHUB_TOKEN }}
