@@ -9,7 +9,7 @@ jobs:
         steps:
             - uses: actions/checkout@v1
             - name: Checkout
-              run: git checkout master
+              run: env && git checkout master
             - name: Setup NodeJS
               uses: actions/setup-node@v1
               with:
