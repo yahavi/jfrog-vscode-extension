@@ -12,17 +12,19 @@ jobs:
               uses: actions/setup-node@v1
               with:
                   node-version: '10.x'
+            - name: Install vsce
+              run: npm i -g vsce
             - name: Install
               run: npm i
             - name: Lint
               run: npm run lint
-            - name: Install vsce
-              run: npm i -g vsce
+
             # - name: Test
             #   run: xvfb-run npm t
             - name: Build
               run: vsce package
-
+            - name: Push
+              run: git push
             - name: Publish to marketplace
               run: echo ${{ github.ref }} | cut -c 11- | xargs vsce publish
             # - name: Publish
