@@ -21,7 +21,7 @@ jobs:
               with:
                   node-version: '10.x'
             - name: Set up Maven
-              uses: stCarolas/setup-maven@v3
+              uses: stCarolas/setup-maven@v2
               with:
                   maven-version: 3.5.4
             - name: Install
