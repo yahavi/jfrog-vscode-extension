@@ -106,6 +106,7 @@ export class DependenciesTreeDataProvider implements vscode.TreeDataProvider<Dep
             checkCanceled();
             let componentDetails: ComponentDetails[] = this._componentsToScan.toArray();
             let step: number = (100 / componentDetails.length) * 100;
+            const stepInc: number = (100 / componentDetails.length) * 100;
             progress.report({ message: 0 + '/' + componentDetails.length + ' components scanned' });
             for (let currentIndex: number = 0; currentIndex < componentDetails.length; currentIndex += 100) {
                 let partialComponents: ComponentDetails[] = componentDetails.slice(currentIndex, currentIndex + 100);
@@ -113,7 +114,7 @@ export class DependenciesTreeDataProvider implements vscode.TreeDataProvider<Dep
                 this.addMissingComponents(partialComponents, artifacts);
                 await this._treesManager.scanCacheManager.addComponents(artifacts);
                 progress.report({ message: currentIndex + 100 + '/' + componentDetails.length + ' components scanned', increment: step });
-                checkCanceled();
+                step += stepInc;
             }
         } catch (error) {
             if (error.message === DependenciesTreeDataProvider.CANCELLATION_ERROR.message) {
@@ -143,23 +144,30 @@ export class DependenciesTreeDataProvider implements vscode.TreeDataProvider<Dep
     }
 
     private async repopulateTree(quickScan: boolean) {
-        await ScanUtils.scanWithProgress(async (progress: vscode.Progress<{ message?: string; increment?: number }>, checkCanceled: () => void) => {
-            this.clearTree();
-            let dependenciesTree: DependenciesTreeNode = <DependenciesTreeNode>this.dependenciesTree;
-            await DependenciesTreesFactory.createDependenciesTrees(
-                this._workspaceFolders,
-                this._componentsToScan,
-                this._treesManager,
-                dependenciesTree,
-                quickScan
-            );
-            await this.scanAndCacheArtifact(progress, checkCanceled);
-            for (let dependenciesTreeNode of dependenciesTree.children) {
-                this.addXrayInfoToTree(dependenciesTreeNode);
-                dependenciesTreeNode.issues = dependenciesTreeNode.processTreeIssues();
-            }
-            this._onDidChangeTreeData.fire();
-        });
+        await ScanUtils.scanWithProgress(
+            async (progress: vscode.Progress<{ message?: string; increment?: number }>, checkCanceled: () => void) =>
+                new Promise<void>(
+                    async (resolve): Promise<void> => {
+                        this.clearTree();
+                        let dependenciesTree: DependenciesTreeNode = <DependenciesTreeNode>this.dependenciesTree;
+                        await DependenciesTreesFactory.createDependenciesTrees(
+                            this._workspaceFolders,
+                            this._componentsToScan,
+                            this._treesManager,
+                            dependenciesTree,
+                            quickScan
+                        );
+                        await this.scanAndCacheArtifact(progress, checkCanceled);
+                        for (let dependenciesTreeNode of dependenciesTree.children) {
+                            this.addXrayInfoToTree(dependenciesTreeNode);
+                            dependenciesTreeNode.issues = dependenciesTreeNode.processTreeIssues();
+                        }
+                        this._onDidChangeTreeData.fire();
+                        resolve();
+                        return;
+                    }
+                )
+        );
     }
 
     private clearTree() {

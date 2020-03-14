@@ -7,7 +7,7 @@ export class ScanUtils {
     public static readonly SPAWN_PROCESS_BUFFER_SIZE: number = 104857600;
 
     public static async scanWithProgress(
-        scanCbk: (progress: vscode.Progress<{ message?: string; increment?: number }>, checkCanceled: () => void) => void
+        scanCbk: (progress: vscode.Progress<{ message?: string; increment?: number }>, checkCanceled: () => void) => Promise<void>
     ) {
         await vscode.window.withProgress(
             <vscode.ProgressOptions>{
@@ -22,9 +22,9 @@ export class ScanUtils {
     }
 
     private static checkCanceled(token: vscode.CancellationToken) {
-        if (token.isCancellationRequested) {
+        token.onCancellationRequested  (() => {
             throw new Error('Xray Scan cancelled');
-        }
+        });
     }
 
     public static getHomePath(): string {
