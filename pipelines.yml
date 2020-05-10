@@ -19,6 +19,11 @@ pipelines:
           sourceLocation: .
       - name: TestPlugin
         type: Bash
+        configuration:
+          inputResources:
+            - name: vscodeExtensionRepo
+          integrations:
+            - name: myArtifactory
         execution:
           onExecute:
             - npm t
