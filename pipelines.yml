@@ -1,0 +1,18 @@
+resources:
+  - name: gitRepo
+    type: GitRepo
+    configuration:
+      path: yahavi/jfrog-vscode-extension
+      gitProvider: myGitHub
+
+pipelines:
+  - name: Tests
+    steps:
+      - name: TestPlugin
+        type: NpmBuild
+        configuration:
+          inputResources:
+            - name: gitRepo
+          integrations:
+            - name: myArtifactory
+          npmArgs: t

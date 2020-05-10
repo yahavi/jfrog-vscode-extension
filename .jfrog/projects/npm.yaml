@@ -1,0 +1,8 @@
+version: 1
+type: npm
+resolver:
+  repo: npm
+  serverId: myArtifactory
+deployer:
+  repo: npm
+  serverId: myArtifactory
