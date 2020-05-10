@@ -1,20 +1,25 @@
-# resources:
-#   - name: gitRepo
-#     type: GitRepo
-#     configuration:
-#       path: yahavi/jfrog-vscode-extension
-#       gitProvider: myGitHub
+resources:
+  - name: vscodeExtensionRepo
+    type: GitRepo
+    configuration:
+      path: yahavi/jfrog-vscode-extension
+      gitProvider: myGitHub
 
 pipelines:
-  - name: JFrog_VSCode_Extension
+  - name: VsCodeInstall
     steps:
-      - name: TestPlugin
+      - name: InstallPlugin
         type: NpmBuild
         configuration:
           inputResources:
-            - name: gitRepo
+            - name: vscodeExtensionRepo
           integrations:
             - name: myArtifactory
-          npmArgs: t
           repositoryName: npm
           sourceLocation: .
+      - name: TestPlugin
+        type: Bash
+        execution:
+          onExecute:
+            npm t
+  
