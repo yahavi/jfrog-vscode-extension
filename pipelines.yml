@@ -1,9 +1,9 @@
-resources:
-  - name: gitRepo
-    type: GitRepo
-    configuration:
-      path: yahavi/jfrog-vscode-extension
-      gitProvider: myGitHub
+# resources:
+#   - name: gitRepo
+#     type: GitRepo
+#     configuration:
+#       path: yahavi/jfrog-vscode-extension
+#       gitProvider: myGitHub
 
 pipelines:
   - name: Tests
