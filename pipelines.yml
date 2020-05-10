@@ -16,3 +16,5 @@ pipelines:
           integrations:
             - name: myArtifactory
           npmArgs: t
+          repositoryName: npm
+          sourceLocation: .
