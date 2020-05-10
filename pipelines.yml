@@ -6,7 +6,7 @@
 #       gitProvider: myGitHub
 
 pipelines:
-  - name: Tests
+  - name: JFrog_VSCode_Extension
     steps:
       - name: TestPlugin
         type: NpmBuild
