@@ -1,4 +1,3 @@
-import * as clipboardy from 'clipboardy';
 import * as vscode from 'vscode';
 import { ConnectionManager } from '../connect/connectionManager';
 import { ExclusionsManager } from '../exclusions/exclusionsManager';
@@ -8,7 +7,6 @@ import { FocusManager } from '../focus/focusManager';
 import { LogManager } from '../log/logManager';
 import { DependenciesTreeNode } from '../treeDataProviders/dependenciesTree/dependenciesTreeNode';
 import { TreesManager } from '../treeDataProviders/treesManager';
-import { TreeDataHolder } from '../treeDataProviders/utils/treeDataHolder';
 
 /**
  * Register and execute all commands in the extension.
@@ -82,25 +80,12 @@ export class CommandManager implements ExtensionComponent {
      * Copy the node content to clipboard.
      * @param node The tree node. Can be instance of DependenciesTreeNode or TreeDataHolder.
      */
-    private doCopyToClipboard(node: vscode.TreeItem) {
-        let text: string | undefined;
-        if (node instanceof TreeDataHolder) {
-            // 'Component Details' or leaf of 'Component Issue Details'
-            let treeDataHolder: TreeDataHolder = node;
-            if (treeDataHolder.value) {
-                text = node.value;
-            }
-        } else if (node.description) {
-            // 'Component Tree' with version
-            text = node.label + ':' + node.description;
-        } else if (node.label) {
-            // 'Component Tree' without version or 'Component Issue Details' root node
-            text = node.label;
+    private async doCopyToClipboard(node: vscode.TreeItem) {
+        if (!(node instanceof DependenciesTreeNode)) {
+            return;
         }
-        if (text) {
-            clipboardy.writeSync(text);
+           await vscode.env.clipboard.writeText(node.generalInfo.getComponentId())
             vscode.window.showInformationMessage('Saved in clipboard');
-        }
     }
 
     /**

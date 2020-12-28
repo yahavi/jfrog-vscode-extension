@@ -112,8 +112,7 @@
             },
             {
                 "command": "jfrog.xray.copyToClipboard",
-                "title": "Copy to clipboard",
-                "icon": "$(files)"
+                "title": "Copy"
             }
         ],
         "menus": {
@@ -151,8 +150,7 @@
                     "group": "inline"
                 },
                 {
-                    "command": "jfrog.xray.copyToClipboard",
-                    "group": "inline"
+                    "command": "jfrog.xray.copyToClipboard"
                 }
             ]
         }
