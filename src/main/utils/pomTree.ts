@@ -70,14 +70,8 @@ export class PomTree {
 
     public async getRawDependencies(treesManager: TreesManager): Promise<string[] | undefined> {
         const dependencyTreeFile: string = path.join(this._pomPath, '.jfrog_vscode', 'maven');
-        try {
-            const pomContent: string | undefined = ScanUtils.readFileIfExists(dependencyTreeFile);
-            if (!pomContent) {
-                throw new Error();
-            }
-            const pomDependencies: string | undefined = pomContent?.substring(pomContent.indexOf('\n') + 1);
-            return pomDependencies.split(/\r?\n/).filter(line => line.trim() !== '');
-        } catch (error) {
+        const pomContent: string | undefined = ScanUtils.readFileIfExists(dependencyTreeFile);
+        if (!pomContent) {
             treesManager.logManager.logMessage(
                 'Dependencies were not found at ' +
                     path.join(this._pomPath, 'pom.xml') +
@@ -85,9 +79,9 @@ export class PomTree {
                     "Hint: For projects which include the 'org.apache.maven.plugins:maven-dependency-plugin' the scanning functionality is disabled",
                 'ERR'
             );
-        } finally {
-            await ScanUtils.removeFolder(path.join(dependencyTreeFile, '..'));
+            return;
         }
-        return;
+        const pomDependencies: string | undefined = pomContent?.substring(pomContent.indexOf('\n') + 1);
+        return pomDependencies?.split(/\r?\n/).filter(line => line.trim() !== '');
     }
 }

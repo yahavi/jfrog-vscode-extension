@@ -387,7 +387,7 @@ describe('Maven Tests', () => {
     });
 
     async function runCreateMavenDependenciesTrees(componentsToScan: Collections.Set<ComponentDetails>, parent: DependenciesTreeNode) {
-        let dependenciesTrees: DependenciesTreeNode[] = await MavenUtils.createMavenDependenciesTrees(
+        let dependenciesTrees: DependenciesTreeNode[] = await MavenUtils.createDependenciesTrees(
             workspaceFolders,
             componentsToScan,
             treesManager,

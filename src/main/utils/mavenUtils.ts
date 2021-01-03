@@ -170,7 +170,7 @@ export class MavenUtils {
      * @param root             - The base tree node
      * @param quickScan        - True to allow using the scan cache
      */
-    public static async createMavenDependenciesTrees(
+    public static async createDependenciesTrees(
         workspaceFolders: vscode.WorkspaceFolder[],
         componentsToScan: Collections.Set<ComponentDetails>,
         treesManager: TreesManager,
@@ -188,14 +188,29 @@ export class MavenUtils {
             return [];
         }
         treesManager.logManager.logMessage('Generating Maven Dependency Tree', 'INFO');
-        let mavenTreeNodes: MavenTreeNode[] = [];
         let prototypeTree: PomTree[] = MavenUtils.buildPrototypePomTree(pomXmls, treesManager.logManager);
-        for (let ProjectTree of prototypeTree) {
+
+        try {
+            return await MavenUtils.createTreesFromPrototype(prototypeTree, componentsToScan, treesManager, root, quickScan);
+        } finally {
+            pomXmls.forEach(async pomXml => await ScanUtils.removeFolder(path.join(pomXml.fsPath, '..', '.jfrog_vscode')));
+        }
+    }
+
+    private static async createTreesFromPrototype(
+        prototypeTree: PomTree[],
+        componentsToScan: Collections.Set<ComponentDetails>,
+        treesManager: TreesManager,
+        root: DependenciesTreeNode,
+        quickScan: boolean
+    ): Promise<MavenTreeNode[]> {
+        let mavenTreeNodes: MavenTreeNode[] = [];
+        for (let projectTree of prototypeTree) {
             try {
-                treesManager.logManager.logMessage('Analyzing pom.xml at ' + ProjectTree.pomPath, 'INFO');
-                ProjectTree.runMavenDependencyTree();
-                let dependenciesTreeNode: MavenTreeNode = new MavenTreeNode(ProjectTree.pomPath, componentsToScan, treesManager, root);
-                await dependenciesTreeNode.refreshDependencies(quickScan, ProjectTree);
+                treesManager.logManager.logMessage('Analyzing pom.xml at ' + projectTree.pomPath, 'INFO');
+                projectTree.runMavenDependencyTree();
+                let dependenciesTreeNode: MavenTreeNode = new MavenTreeNode(projectTree.pomPath, componentsToScan, treesManager, root);
+                await dependenciesTreeNode.refreshDependencies(quickScan, projectTree);
                 if (dependenciesTreeNode.children.length === 0) {
                     root.children.splice(root.children.indexOf(dependenciesTreeNode), 1);
                 } else {
@@ -205,7 +220,7 @@ export class MavenUtils {
                 treesManager.logManager.logMessage(
                     'Could not get dependencies tree from pom.xml.\n' +
                         'Try Install it by running "mvn clean install" from ' +
-                        ProjectTree.pomPath +
+                        projectTree.pomPath +
                         '.',
                     'ERR'
                 );
