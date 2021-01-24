@@ -3,6 +3,8 @@ import * as path from 'path';
 import * as vscode from 'vscode';
 import * as fse from 'fs-extra';
 import * as exec from 'child_process';
+import { DependenciesTreeNode } from '../treeDataProviders/dependenciesTree/dependenciesTreeNode';
+import { LogManager } from '../log/logManager';
 
 export class ScanUtils {
     public static readonly SPAWN_PROCESS_BUFFER_SIZE: number = 104857600;
@@ -47,6 +49,18 @@ export class ScanUtils {
     }
 
     public static executeCmd(command: string, cwd?: string): any {
-        return exec.execSync(command, { cwd: cwd, maxBuffer: ScanUtils.SPAWN_PROCESS_BUFFER_SIZE });
+        return exec.execSync(command, { cwd: cwd, maxBuffer: ScanUtils.SPAWN_PROCESS_BUFFER_SIZE, env: process.env });
+    }
+
+    public static hasLoop(node: DependenciesTreeNode, logger: LogManager): boolean {
+        let parent: DependenciesTreeNode | undefined = node.parent;
+        while (parent) {
+            if (parent.generalInfo?.getComponentId() === node.generalInfo?.getComponentId()) {
+                logger.logMessage('Loop detected in ' + node.generalInfo.artifactId, 'DEBUG');
+                return true;
+            }
+            parent = parent.parent;
+        }
+        return false;
     }
 }

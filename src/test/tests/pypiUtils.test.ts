@@ -9,7 +9,7 @@ import { ConnectionManager } from '../../main/connect/connectionManager';
 import { LogManager } from '../../main/log/logManager';
 import { ScanCacheManager } from '../../main/scanCache/scanCacheManager';
 import { DependenciesTreeNode } from '../../main/treeDataProviders/dependenciesTree/dependenciesTreeNode';
-import { PypiTreeNode } from '../../main/treeDataProviders/dependenciesTree/dependenciesRoot/pypiTree';
+import { PipTreeNode } from '../../main/treeDataProviders/dependenciesTree/dependenciesRoot/pipTree';
 import { TreesManager } from '../../main/treeDataProviders/treesManager';
 import { GeneralInfo } from '../../main/types/generalInfo';
 import { PypiUtils } from '../../main/utils/pypiUtils';
@@ -91,7 +91,7 @@ describe('Pypi Utils Tests', () => {
     it('Create Pypi Dependencies Trees', async () => {
         let localPython: string = getLocalPython();
         // Test 'resources/python/requirements'
-        let dependenciesTreeNode: PypiTreeNode = new PypiTreeNode(
+        let dependenciesTreeNode: PipTreeNode = new PipTreeNode(
             workspaceFolders[0].uri.fsPath,
             new Collections.Set(),
             treesManager,
@@ -104,7 +104,7 @@ describe('Pypi Utils Tests', () => {
         checkFireDependency(dependenciesTreeNode);
 
         // Test 'resources/python/setup'
-        dependenciesTreeNode = new PypiTreeNode(
+        dependenciesTreeNode = new PipTreeNode(
             workspaceFolders[1].uri.fsPath,
             new Collections.Set(),
             treesManager,
@@ -114,13 +114,13 @@ describe('Pypi Utils Tests', () => {
         dependenciesTreeNode.refreshDependencies(true);
         assert.deepEqual(dependenciesTreeNode.label, 'setup');
         assert.deepEqual(dependenciesTreeNode.children.length, 3);
-        let snake: PypiTreeNode | undefined = <PypiTreeNode | undefined>dependenciesTreeNode.children.filter(child => child.label === 'snake').pop();
+        let snake: PipTreeNode | undefined = <PipTreeNode | undefined>dependenciesTreeNode.children.filter(child => child.label === 'snake').pop();
         assert.isDefined(snake);
         assert.deepEqual(snake!.children.length, 3);
         checkFireDependency(snake!);
 
         // Test 'resources/python/setupAndRequirements'
-        dependenciesTreeNode = new PypiTreeNode(
+        dependenciesTreeNode = new PipTreeNode(
             workspaceFolders[2].uri.fsPath,
             new Collections.Set(),
             treesManager,
@@ -130,13 +130,13 @@ describe('Pypi Utils Tests', () => {
         dependenciesTreeNode.refreshDependencies(true);
         assert.deepEqual(dependenciesTreeNode.label, 'setupAndRequirements');
         assert.deepEqual(dependenciesTreeNode.children.length, 3);
-        snake = <PypiTreeNode | undefined>dependenciesTreeNode.children.filter(child => child.label === 'snake').pop();
+        snake = <PipTreeNode | undefined>dependenciesTreeNode.children.filter(child => child.label === 'snake').pop();
         assert.isDefined(snake);
         assert.deepEqual(snake!.children.length, 3);
         checkFireDependency(snake!);
     });
 
-    function checkFireDependency(dependenciesTreeNode: PypiTreeNode) {
+    function checkFireDependency(dependenciesTreeNode: PipTreeNode) {
         let fire: DependenciesTreeNode | undefined = dependenciesTreeNode.children.filter(child => child.label === 'fire').pop();
         assert.isDefined(fire);
         assert.deepEqual(fire!.generalInfo.artifactId, 'fire');

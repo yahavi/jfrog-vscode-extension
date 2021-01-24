@@ -73,7 +73,7 @@ export class GoTreeNode extends RootNode {
     }
 
     private populateDependenciesTree(dependenciesTreeNode: DependenciesTreeNode, quickScan: boolean) {
-        if (this.hasLoop(dependenciesTreeNode)) {
+        if (ScanUtils.hasLoop(dependenciesTreeNode, this._treesManager.logManager)) {
             return;
         }
         this.addComponentToScan(dependenciesTreeNode, quickScan);
@@ -89,18 +89,6 @@ export class GoTreeNode extends RootNode {
             );
             this.populateDependenciesTree(grandchild, quickScan);
         });
-    }
-
-    private hasLoop(dependenciesTreeNode: DependenciesTreeNode): boolean {
-        let parent: DependenciesTreeNode | undefined = dependenciesTreeNode.parent;
-        while (parent) {
-            if (parent.generalInfo?.getComponentId() === dependenciesTreeNode.generalInfo?.getComponentId()) {
-                this._treesManager.logManager.logMessage('Loop detected in ' + dependenciesTreeNode.generalInfo.artifactId, 'DEBUG');
-                return true;
-            }
-            parent = parent.parent;
-        }
-        return false;
     }
 
     private getModuleName(): string {
