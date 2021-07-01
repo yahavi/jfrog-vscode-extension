@@ -75,7 +75,6 @@ export class ConnectionUtils {
         }
 
         // Ping to '<url>/xray'
-        url += url.endsWith('/') ? 'xray' : '/xray';
         let jfrogClient: JfrogClient = this.createJfrogClient(url, '', '', username, password);
         return await jfrogClient.xray().system().ping();
     }
