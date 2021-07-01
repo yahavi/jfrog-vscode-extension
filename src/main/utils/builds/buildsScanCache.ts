@@ -1,11 +1,12 @@
-import {LogManager} from "../../log/logManager";
-import path from "path";
+import { LogManager } from '../../log/logManager';
+import path from 'path';
 import * as fs from 'fs';
-import AdmZip from "adm-zip";
-import {IDetailsResponse} from "jfrog-client-js";
+import AdmZip from 'adm-zip';
+import { IDetailsResponse } from 'jfrog-client-js';
 
 export enum Type {
-    BUILD_INFO, BUILD_SCAN_RESULTS
+    BUILD_INFO,
+    BUILD_SCAN_RESULTS
 }
 
 export class BuildsScanCache {
@@ -13,14 +14,14 @@ export class BuildsScanCache {
     //public static readonly MAX_BUILDS: number = 100; todo
     // Each build should have 1 build info file and 1 Xray scan results file
     public static readonly MAX_FILES: number = 100 * 2;
-    private static readonly CACHE_BASE_PATH: string = path.resolve(require('os').homedir(), ".jfrog-vscode-extension", "ci-cache");
+    private static readonly CACHE_BASE_PATH: string = path.resolve(require('os').homedir(), '.jfrog-vscode-extension', 'ci-cache');
 
     private readonly buildsDir: string;
 
     constructor(private _projectName: string, private _logger: LogManager) {
         this.buildsDir = path.resolve(BuildsScanCache.CACHE_BASE_PATH, this._projectName); // todo base 64
         if (!fs.existsSync(this.buildsDir)) {
-            fs.mkdirSync(this.buildsDir, {recursive: true});
+            fs.mkdirSync(this.buildsDir, { recursive: true });
         }
         this.cleanUpOldBuilds();
     }
@@ -64,8 +65,12 @@ export class BuildsScanCache {
         return JSON.parse(build);
     }
 
-    public loadScanResults(buildName: string, buildNumber: string): IDetailsResponse {
-        return this.load(buildName, buildNumber, Type.BUILD_SCAN_RESULTS);
+    public loadScanResults(buildName: string, buildNumber: string): IDetailsResponse | null {
+        let response: any = this.load(buildName, buildNumber, Type.BUILD_SCAN_RESULTS);
+        if (!response) {
+            return null;
+        }
+        return Object.assign({} as IDetailsResponse, JSON.parse(response));
     }
 
     public getZipPath(buildName: string, buildNumber: string, type: Type): string {
