@@ -68,7 +68,6 @@ export class ConnectionUtils {
         return await jfrogClient.artifactory().system().ping();
     }
 
-    // todo remove
     public static async isPlatformUrl(url: string, username: string, password: string): Promise<boolean> {
         // If URL ends with '/xray', the URL is an Xray URL
         if (url.endsWith('/xray') || url.endsWith('/xray/')) {
@@ -77,7 +76,7 @@ export class ConnectionUtils {
 
         // Ping to '<url>/xray'
         url += url.endsWith('/') ? 'xray' : '/xray';
-        let jfrogClient: JfrogClient = this.createJfrogClient('', '', url, username, password);
+        let jfrogClient: JfrogClient = this.createJfrogClient(url, '', '', username, password);
         return await jfrogClient.xray().system().ping();
     }
 
@@ -167,9 +166,9 @@ export class ConnectionUtils {
 
     public static createJfrogClient(platformUrl: string, artifactoryUrl: string, xrayUrl: string, username: string, password: string): JfrogClient {
         let clientConfig: IJfrogClientConfig = {
-            platformUrl: '', // todo url,
-            artifactoryUrl: '',
-            xrayUrl: '',
+            platformUrl: platformUrl,
+            artifactoryUrl: artifactoryUrl,
+            xrayUrl: xrayUrl,
             username: username,
             password: password,
             headers: {},

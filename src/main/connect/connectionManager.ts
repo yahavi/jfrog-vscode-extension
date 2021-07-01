@@ -148,7 +148,7 @@ export class ConnectionManager implements ExtensionComponent {
      * If URL is <platform-url>/xray the derived platform URL is <platform-url>.
      * If URL leads to an Xray URL not under JFrog platform (like in Artifactory 6), leave the derive platform URL empty.
      */
-    /*
+    /* //todo
     private async resolveUrlsForBackwardCompatibility() {
         // If only url is set, try resolving other urls for backward compatibility. 
         if (!this._url || !!this._xrayUrl || !!this._rtUrl) {
@@ -182,6 +182,7 @@ export class ConnectionManager implements ExtensionComponent {
         }
         this._logManager.logMessage('Resolved JFrog platform URL: ' + this._url, 'DEBUG');
         this._logManager.logMessage('Resolved Xray URL: ' + this._xrayUrl, 'DEBUG');
+        this._logManager.logMessage('Resolved Artifactory URL: ' + this._rtUrl, 'DEBUG');
     }
 
     /* // todo
