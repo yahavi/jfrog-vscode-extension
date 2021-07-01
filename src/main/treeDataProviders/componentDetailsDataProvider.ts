@@ -70,8 +70,9 @@ export class ComponentDetailsDataProvider implements vscode.TreeDataProvider<any
             return Promise.resolve([]);
         }
         const bgi: BuildGeneralInfo = <BuildGeneralInfo> this._selectedNode.generalInfo;
+        const status: string = Status[bgi.status];
         let children: (TreeDataHolder)[] = [
-            new TreeDataHolder('Status', Status[bgi.status]),
+            new TreeDataHolder('Status', status),
             new TreeDataHolder('Date', bgi.started),
             new TreeDataHolder('Branch', bgi.vcs.branch),
             new TreeDataHolder('Commit Message', bgi.vcs.message)

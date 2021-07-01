@@ -1,11 +1,10 @@
 import * as vscode from 'vscode';
 import {DependenciesTreeNode} from '../dependenciesTreeNode';
 import {BuildGeneralInfo} from "../../../types/buildGeneralinfo";
-import {IDetailsResponse} from "../../../../../../jfrog-client-js";
+import {IDetailsResponse} from "jfrog-client-js";
 import {Issue} from "../../../types/issue";
 import {Severity} from "../../../types/severity";
 import {BuildsUtils} from "../../../utils/builds/buildsUtils";
-import * as Collections from 'typescript-collections';
 
 export class BuildsNode extends DependenciesTreeNode {
     constructor(bgi: BuildGeneralInfo, parent?: DependenciesTreeNode, contextValue?: string) {

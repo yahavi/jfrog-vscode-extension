@@ -18,7 +18,7 @@ export class BuildsUtils {
             logger.logMessage(`Build '${build.name}/${build.number}' does not contain the branch VCS information.`, 'DEBUG');
             vcsList = [new Vcs()];
         }
-        const status: string = build?.properties?.BUILD_STATUS_PROP || '';
+        const status: string = build?.properties?.[BuildsUtils.BUILD_STATUS_PROP] || '';
         const started: Date | null = build.started ? new Date(build.started) : null ;
         return new BuildGeneralInfo(build.name, build.number, build.url, [], '', started, BuildsUtils.getStatusFromString(status), vcsList[0]); // todo check order
     }

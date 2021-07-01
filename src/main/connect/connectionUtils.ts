@@ -164,27 +164,10 @@ export class ConnectionUtils {
     }
 
  */
-/*
-    // todo
-    public static createArtifactoryClient(url: string, username: string, password: string): ArtifactoryClient {
-        let clientConfig: IClientConfig = {
-            serverUrl: 'https://robindev.jfrog.io/artifactory/', // todo url,
-            username: username,
-            password: password,
-            headers: {},
-            proxy: ConnectionUtils.getProxyConfig()
-        } as IClientConfig;
-        ConnectionUtils.addUserAgentHeader(clientConfig);
-        ConnectionUtils.addProxyAuthHeader(clientConfig);
-        const client: JfrogClient = new JfrogClient({});
-        return new ArtifactoryClient(clientConfig);
-    }
-
- */
 
     public static createJfrogClient(platformUrl: string, artifactoryUrl: string, xrayUrl: string, username: string, password: string): JfrogClient {
         let clientConfig: IJfrogClientConfig = {
-            platformUrl: 'https://robindev.jfrog.io/', // todo url,
+            platformUrl: '', // todo url,
             artifactoryUrl: '',
             xrayUrl: '',
             username: username,

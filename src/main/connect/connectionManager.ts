@@ -166,11 +166,11 @@ export class ConnectionManager implements ExtensionComponent {
         }
     }
 */
-    // todo remove
     private async resolveUrls() {
         if (await ConnectionUtils.isPlatformUrl(this._url, this._username, this._password)) {
             // _url is a platform URL
             this._xrayUrl = this._url.endsWith('/') ? this._url + 'xray' : this._url + '/xray';
+            this._rtUrl = this._url.endsWith('/') ? this._url + 'artifactory' : this._url + '/artifactory';
         } else {
             // _url is an Xray URL
             this._xrayUrl = this._url;

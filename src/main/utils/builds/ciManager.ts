@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import {TreesManager} from '../../treeDataProviders/treesManager';
 import {Configuration} from '../configuration';
-import {IAqlSearchResult, IDetailsResponse, ISearchEntry, JfrogClient} from '../../../../../jfrog-client-js';
+import {IAqlSearchResult, IDetailsResponse, ISearchEntry, JfrogClient} from 'jfrog-client-js';
 import PQueue from 'p-queue';
 import {BuildGeneralInfo} from "../../types/buildGeneralinfo";
 import {BuildsUtils} from "./buildsUtils";
@@ -18,7 +18,7 @@ import {Dependency} from "../../types/dependency";
  */
 export class CiManager {
     private static readonly BUILD_INFO_REPO: string = '/artifactory-build-info/';
-    private static readonly DISPLAY_BUILDS_NUM: string = '10'; // todo revert to 100
+    private static readonly DISPLAY_BUILDS_NUM: string = '3'; // todo revert to 100
     public static readonly MINIMAL_XRAY_VERSION_SUPPORTED_FOR_CI: string = "3.21.2";
     public static readonly CI_CANCELLATION_ERROR: Error = new Error('Loading builds scan cancelled');
 
